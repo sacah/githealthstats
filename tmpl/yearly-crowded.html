@@ -1,0 +1,65 @@
+<html>
+
+<head>
+  <style>
+    .add {
+      color: #319c31;
+    }
+
+    .del {
+      color: #F00;
+    }
+
+    .fileHeader { font-weight: bold; }
+
+    TABLE {
+      float: left;
+      border: solid #666 1px;
+      margin: 5px;
+    }
+
+    TD {
+      padding: 3px;
+    }
+  </style>
+  <style id="dynamicHighlight"></style>
+  <script>
+    function highlightfile(e) {
+      document.getElementById('dynamicHighlight').innerHTML = `.${e.currentTarget.className} TD { border: solid #F00 1px; padding: 2px; background-color: #4da5e9; }
+      .${e.currentTarget.className} TD,
+      .${e.currentTarget.className} TD SPAN { color: #FFF; }`;
+    }
+  </script>
+</head>
+
+<body>
+  <% months.forEach(function (month) { %>
+  <table>
+    <thead>
+      <th colspan="2"><%= month.name %></th>
+    </thead>
+    <tbody>
+      <% month.files.forEach(function (file) { %>
+        <tr class="<%= file.name.replace(/[^a-z]/gi, ''); %>">
+          <td class="fileHeader"><%= file.name %></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <% Object.keys(file.people).forEach(function (person) { %>
+          <tr class="<%= file.name.replace(/[^a-z]/gi, ''); %>">
+            <td><%= person %></td>
+            <td><%= file.people[person].add %></td>
+            <td><%= file.people[person].remove %></td>
+          </tr>
+        <% }); %>
+      <% }); %>
+    </tbody>
+  </table>
+  <% }); %>
+  <script>
+    Array.from(document.querySelectorAll('TR')).forEach(element => element.addEventListener('mouseover',
+      highlightfile));
+  </script>
+</body>
+
+</html>
